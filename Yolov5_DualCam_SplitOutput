@@ -1,0 +1,71 @@
+import torch
+import cv2
+import subprocess
+import time
+
+model = torch.hub.load('.', 'custom', 'runs/train/exp23/weights/best.pt', source='local', device='0' )
+
+#cameraRight = cv2.VideoCapture(1)  # open the right camera
+#cameraLeft = cv2.VideoCapture(0)   # open the left camera
+
+
+if not cameraRight.isOpened() or not cameraLeft.isOpened():
+    if not cameraRight.isOpened():
+        print("Cannot open right camera")
+     
+    if not cameraLeft.isOpened():
+        print("Cannot open left camera")
+    exit()
+
+def frame_R(resultR):
+    dfR = resultR.pandas().xyxy[0]
+
+    for ind in dfR.index:
+        xR1, yR1 = int(dfR['xmin'][ind]), int(dfR['ymin'][ind])
+        xR2, yR2 = int(dfR['xmax'][ind]), int(dfR['ymax'][ind])
+        label = dfR['name'][ind]
+        conf = dfR['confidence'][ind]
+        text = label + ' ' + str(conf.round(decimals= 2))
+        cv2.rectangle(frameR, (xR1, yR1), (xR2, yR2), (255, 255, 0), 2)
+        cv2.putText(frameR, text, (xR1, yR1 - 5), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 0), 2)
+        cv2.imshow('VideoR',frameR)
+        return frameR
+
+def frame_L(resultL):
+    dfL = resultL.pandas().xyxy[0]
+
+    for ind in dfL.index:
+        xL1, yL1 = int(dfL['xmin'][ind]), int(dfL['ymin'][ind])
+        xL2, yL2 = int(dfL['xmax'][ind]), int(dfL['ymax'][ind])
+        label = dfL['name'][ind]
+        conf = dfL['confidence'][ind]
+        text = label + ' ' + str(conf.round(decimals= 2))
+        cv2.rectangle(frameL, (xL1, yL1), (xL2, yL2), (255, 255, 0), 2)
+        cv2.putText(frameL, text, (xL1, yL1 - 5), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 0), 2)
+        cv2.imshow('VideoL',frameL)
+        return frameL
+    
+     
+while True:
+    ret1, frameR = cameraRight.read()
+    ret2, frameL = cameraLeft.read()
+
+    if frameR is None:
+        break
+    resultR = model(frameR)
+
+    if frameL is None:
+        break
+    resultL = model(frameL)
+
+    frame_R(resultR)
+    frame_L(resultL)
+
+    #concat_frame = cv2.hconcat([frameL,frameR])
+    #frame = cv2.resize(concat_frame, (920, 640))
+    #frame = cap.read()[1]
+    
+
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+cv2.waitKey(10)
