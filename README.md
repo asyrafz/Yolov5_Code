@@ -20,13 +20,12 @@ To get started with YOLOv5, follow these simple steps:
 
 This code using python 3.9. from ultralytics
 
-bash
-Copy code
-git clone https://github.com/your_username/yolov5.git
-Install Dependencies: Navigate to the cloned directory and install the required dependencies using pip:
 
-bash
 Copy code
-pip install -r requirements.txt
-Run Inference: Start using YOLOv5 for object detection tasks. You can use pre-trained models or train your own on custom datasets.
+'''
+git clone https://github.com/your_username/yolov5.git
+'''
+
+## Requirement
+The hubconf.py must in file of working place
 
