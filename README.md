@@ -9,7 +9,7 @@ YOLOv5 is an open-source deep learning framework that aims to provide state-of-t
 
 
 # 🔑 Key Features
-  -Simplicity: YOLOv5 is designed to be easy to use and deploy, with minimal dependencies.
+  - Simplicity: YOLOv5 is designed to be easy to use and deploy, with minimal dependencies.
     -Speed: It offers real-time inference speeds suitable for a wide range of applications.
   -Accuracy: YOLOv5 achieves high levels of accuracy on various object detection tasks.
     -Flexibility: The framework supports customization and fine-tuning for specific use cases.
