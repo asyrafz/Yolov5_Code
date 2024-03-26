@@ -18,12 +18,12 @@ Scalability: It can be easily scaled to different hardware platforms, from CPUs 
 # 🛠️ Getting Started
 To get started with YOLOv5, follow these simple steps:
 
-This code using python 3.9. from ultralytics
+This code using python 3.9. from all libraries origin from [ultralytics Yolov5-640](https://github.com/ultralytics/yolov5/releases)
 
 
 Copy code
 '''
-git clone https://github.com/your_username/yolov5.git
+[git clone https://github.com/asyrafz/Yolov5_Code.git
 '''
 
 ## Requirement
