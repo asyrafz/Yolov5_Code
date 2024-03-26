@@ -23,7 +23,7 @@ This code using python 3.9. from all libraries origin from [ultralytics Yolov5-6
 
 Copy code
 '''
-[git clone https://github.com/asyrafz/Yolov5_Code.git
+git clone https://github.com/asyrafz/Yolov5_Code.git
 '''
 
 ## Requirement
