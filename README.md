@@ -1,3 +1,11 @@
+<p align="center">
+  <img src="https://placehold.it/200x200" alt="YOLOv5 Logo">
+</p>
+<h1 align="center">YOLOv5</h1>
+<p align="center">
+  Welcome to YOLOv5 - a simple yet powerful object detection model based on the YOLO (You Only Look Once) architecture. This repository contains all the resources you need to get started with YOLOv5 quickly and efficiently.
+</p>
+
 #YOLOv5
 Welcome to YOLOv5 - a simple yet powerful object detection model based on the YOLO (You Only Look Once) architecture. This repository contains all the resources you need to get started with YOLOv5 quickly and efficiently.
 
