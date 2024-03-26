@@ -1,0 +1,39 @@
+import torch
+import cv2
+
+model = torch.hub.load('.', 'custom', 'best_exp22.pt', source='local', device='0' )
+
+cameraRight = cv2.VideoCapture(1)  # open the right camera
+cameraLeft = cv2.VideoCapture(0)   # open the left camera
+
+if not cameraRight.isOpened():
+    print("Cannot open right camera")
+     
+if not cameraLeft.isOpened():
+    print("Cannot open left camera")
+
+
+while True:
+    ret1, frameR = cameraRight.read()
+    ret2, frameL = cameraLeft.read()
+
+    frame = cv2.hconcat([frameL,frameR])
+    #frame = cap.read()[1]
+    if frame is None:
+        break
+    result = model(frame)
+    df = result.pandas().xyxy[0]
+
+    for ind in df.index:
+        x1, y1 = int(df['xmin'][ind]), int(df['ymin'][ind])
+        x2, y2 = int(df['xmax'][ind]), int(df['ymax'][ind])
+        label = df['name'][ind]
+        conf = df['confidence'][ind]
+        text = label + ' ' + str(conf.round(decimals= 2))
+        cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 255, 0), 2)
+        cv2.putText(frame, text, (x1, y1 - 5), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 0), 2)
+        cv2.imshow('Video',frame)
+
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+cv2.waitKey(10)
