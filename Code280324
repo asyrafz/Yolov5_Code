@@ -1,0 +1,100 @@
+import torch
+import cv2
+import subprocess
+import time
+
+#model = torch.hub.load('.', 'custom', 'runs/train/exp23/weights/best.pt', source='local', device='0' )
+model = torch.hub.load('.', 'custom', 'runs/train/exp46/weights/best.pt', source='local', device='0')
+
+#cameraRight = cv2.VideoCapture('/dev/video0')  # open the right camera
+#cameraLeft = cv2.VideoCapture('/dev/video1')   # open the left camera
+
+cameraRight = cv2.VideoCapture('Testvideo/SA.mp4')  # open the right camera
+cameraLeft = cv2.VideoCapture('Testvideo/UitmSA.mp4')   # open the left camera
+
+if not cameraRight.isOpened() or not cameraLeft.isOpened():
+    print("Cannot open camera(s)")
+    exit()
+
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Define codec for MP4 output
+out = cv2.VideoWriter("rakaman.mp4", fourcc, 20.0, (1080, 640))  # Create video writer object
+
+
+def frame_R(resultR):
+    dfR = resultR.pandas().xyxy[0]
+
+    for ind in dfR.index:
+        xR1, yR1 = int(dfR['xmin'][ind]), int(dfR['ymin'][ind])
+        xR2, yR2 = int(dfR['xmax'][ind]), int(dfR['ymax'][ind])
+        labelR = dfR['name'][ind]
+        conf = dfR['confidence'][ind]
+        text = labelR + ' ' + str(conf.round(decimals= 2))
+        #cv2.rectangle(frameR, (xR1, yR1), (xR2, yR2), (255, 255, 0), 2)
+        #cv2.putText(frameR, text, (xR1, yR1 - 5), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 0), 2)
+        conf_valR = float(conf.round(decimals= 2))
+        if conf_valR >= 0.7:
+            if labelR != 'One Way':
+                cv2.rectangle(frameR, (xR1, yR1), (xR2, yR2), (255, 255, 0), 2)
+                cv2.putText(frameR, text, (xR1, yR1 - 5), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 0), 2)
+                print(f"Right Detected: {labelR}~{conf_valR}")
+    
+    #cv2.imshow('VideoR',frameR)
+    return frameR
+
+def frame_L(resultL):
+    dfL = resultL.pandas().xyxy[0]
+
+    for ind in dfL.index:
+        xL1, yL1 = int(dfL['xmin'][ind]), int(dfL['ymin'][ind])
+        xL2, yL2 = int(dfL['xmax'][ind]), int(dfL['ymax'][ind])
+        labelL = dfL['name'][ind]
+        conf = dfL['confidence'][ind]
+        text = labelL + ' ' + str(conf.round(decimals= 2))
+        #cv2.rectangle(frameL, (xL1, yL1), (xL2, yL2), (255, 255, 0), 2)
+        #cv2.putText(frameL, text, (xL1, yL1 - 5), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 0), 2)
+        conf_valL = float(conf.round(decimals= 2))
+        if conf_valL >= 0.7:
+   
+            if labelL != 'One Way':
+                cv2.rectangle(frameL, (xL1, yL1), (xL2, yL2), (255, 0, 0), 2)
+                cv2.putText(frameL, text, (xL1, yL1 - 5), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 0), 2)
+                print(f"Left  Detected: {labelL}~{conf_valL}")
+            
+    #cv2.imshow('VideoL',frameL)
+    return frameL
+
+    
+if __name__ == "__main__":
+    # Your code to run directly when the script is executed
+    # goes here
+    
+
+    while True:
+        ret1, frameR = cameraRight.read()
+        ret2, frameL = cameraLeft.read()
+
+        if frameR is None:
+            break
+        resultR = model(frameR)
+
+        if frameL is None:
+            break
+        resultL = model(frameL)
+
+        frameR = cv2.resize(frameR, (1920, 1080))
+        frameL = cv2.resize(frameL, (1920, 1080))
+
+        concat_frame = cv2.hconcat([frame_L(resultL),frame_R(resultR)])
+
+        mergeframe = cv2.resize(concat_frame, (1280, 640))
+        out.write(mergeframe)
+        cv2.imshow('TyphonDlicious Viewer',mergeframe)
+        #frame = cap.read()[1]
+        
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+    cv2.waitKey(10)
+    out.release()
+    cv2.destroyAllWindows()
+
