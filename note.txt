@@ -4,5 +4,6 @@ https://docs.ultralytics.com/yolov5/tutorials/model_export/#exported-model-usage
 
 ##context
 
-python export.py --weights yolov5s.pt --include torchscript onnx     #dapat lajukan 2x
+python export.py --weights yolov5s.pt --include onnx     #dapat lajukan 2x
+python export.py --weights yolov5s.pt --include torchscript onnx
 
