@@ -8,6 +8,6 @@ https://docs.ultralytics.com/yolov5/tutorials/model_export/#exported-model-usage
 #dapat lajukan 2x
 python export.py --weights yolov5s.pt --include onnx     
 
-#laju bila guna cpu
+#laju bila guna gpu (belum nampak perubahan)
 python export.py --weights yolov5s.pt --include torchscript 
 
