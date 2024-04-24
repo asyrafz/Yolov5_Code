@@ -1,0 +1,9 @@
+## link
+
+https://docs.ultralytics.com/yolov5/tutorials/model_export/#exported-model-usage-examples
+
+##context
+
+python export.py --weights yolov5s.pt --include torchscript onnx
+
+Add --half to export models at FP16 half precision for smaller file sizes
