@@ -2,8 +2,9 @@ import torch
 import cv2
 import time
 
-model = torch.hub.load('.', 'custom', 'runs/train/exp15-tick/weights/best.onnx', source='local', device='0' )
-
+#model = torch.hub.load('.', 'custom', 'runs/train/exp15-tick/weights/best.pt', source='local', device='0' )
+model = torch.hub.load('.', 'custom', 'runs/train/exp15-tick/weights/best.onnx', source='local', device='cpu' )
+#model = torch.hub.load('.', 'custom', 'runs/train/exp15-tick/weights/best.torchscript', source='local', device='0' )
 # Set device to GPU if available for hardware acceleration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model.to(device)
